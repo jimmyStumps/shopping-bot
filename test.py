@@ -1,14 +1,21 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 
-driver = webdriver.Chrome()
-driver.get('https://www.amazon.com/')
+options = Options()
+options.add_argument("--headless")
+driver = webdriver.Chrome(options=options)
+driver.get('https://www.kmart.com.au')
 
-search_box = driver.find_element_by_id('twotabsearchbox')
+print(driver.page_source)
+
+search_box = driver.find_element(By.CSS_SELECTOR, 'input[class=MuiInputBase-input]')
 search_box.send_keys('yarn')
 search_box.submit()
 
-soup = BeautifulSoup(driver.page_source, 'html_parser')
+soup = BeautifulSoup(driver.page_source, 'html.parser')
+
 prices = []
 
 for item in soup.find_all('div', {'class': 's-result-item'}):
